@@ -138,6 +138,7 @@ video {
   transform-origin: left;
   transform: scale(0);
   transition: width 150ms ease-in-out;
+  accent-color: white;
 }
 
 .volume-container:hover .volume-slider,
@@ -216,7 +217,7 @@ video {
   aspect-ratio: 16/9;
   top: -1rem;
   transform: translate(-50%, -100%);
-  left: calc(var(--preview-position) * 100%);
+  left: calc(var(--preview-img-position) * 100%);
   border-radius: 0.25rem;
   border: 2px solid white;
   display: none;

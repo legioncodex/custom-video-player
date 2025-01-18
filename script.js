@@ -54,11 +54,11 @@ document.addEventListener("keydown", (e) => {
 //Timeline
 timelineContainer.addEventListener("mousemove", handleTimelineUpdate);
 timelineContainer.addEventListener("mousedown", toggleScrubbing);
-document.addEventListener("mouseup", e => {
-  if (isScrubbing)toggleScrubbing(e);
-})
+document.addEventListener("mouseup", (e) => {
+  if (isScrubbing) toggleScrubbing(e);
+});
 document.addEventListener("mousemove", (e) => {
-  if (isScrubbing) handleTimelineUpdate(e)
+  if (isScrubbing) handleTimelineUpdate(e);
 });
 
 let isScrubbing = false;
@@ -79,9 +79,16 @@ function toggleScrubbing(e) {
   handleTimelineUpdate(e);
 }
 
+function clamp(min, value, max) {
+  return Math.min(Math.max(value, min), max);
+}
+
 function handleTimelineUpdate(e) {
   const rect = timelineContainer.getBoundingClientRect();
   const percent = Math.min(Math.max(0, e.x - rect.x), rect.width) / rect.width;
+  const min = previewImg.offsetWidth / 2 / rect.width;
+  const max = 1 - min;
+  const previewPercent = clamp(min, percent, max);
   const previewImgNumber = Math.max(
     1,
     Math.floor((percent * video.duration) / 10)
@@ -89,6 +96,7 @@ function handleTimelineUpdate(e) {
   const previewImgSrc = `previewImgs/preview${previewImgNumber}.jpg`;
   previewImg.src = previewImgSrc;
   timelineContainer.style.setProperty("--preview-position", percent);
+  timelineContainer.style.setProperty("--preview-img-position",  previewPercent);
 
   if (isScrubbing) {
     e.preventDefault();
