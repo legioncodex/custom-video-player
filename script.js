@@ -63,6 +63,26 @@ document.addEventListener("mousemove", (e) => {
 
 let isScrubbing = false;
 let wasPaused;
+
+timelineContainer.addEventListener("pointerdown", (e) => {
+  timelineContainer.setPointerCapture(e.pointerId);
+  isScrubbing = true;
+  toggleScrubbing(e);
+  timelineContainer.addEventListener("pointermove", handleTimelineUpdate);
+  timelineContainer.addEventListener(
+    "pointerup",
+    (e) => {
+      isScrubbing = false;
+      toggleScrubbing(e);
+      timelineContainer.removeEventListener(
+        "pointermove",
+        handleTimelineUpdate
+      );
+    },
+    { once: true }
+  );
+});
+
 function toggleScrubbing(e) {
   const rect = timelineContainer.getBoundingClientRect();
   const percent = Math.min(Math.max(0, e.x - rect.x), rect.width) / rect.width;
@@ -79,22 +99,9 @@ function toggleScrubbing(e) {
   handleTimelineUpdate(e);
 }
 
-timelineContainer.addEventListener("pointerdown", (e) => {
-  timelineContainer.setPointerCapture(e.pointerId)
-  handleTimelineUpdate(e);
-
-  timelineContainer.addEventListener("pointermove", handleTimelineUpdate);
-  timelineContainer.addEventListener(
-    "pointerup",
-    () => {
-      timelineContainer.removeEventListener(
-        "pointermove",
-        handleTimelineUpdate
-      );
-    },
-    { once: true }
-  );
-});
+function clamp(min, value, max) {
+  return Math.max(min, Math.min(value, max));
+}
 
 function handleTimelineUpdate(e) {
   const rect = timelineContainer.getBoundingClientRect();
@@ -103,9 +110,13 @@ function handleTimelineUpdate(e) {
     1,
     Math.floor((percent * video.duration) / 10)
   );
+  const min = previewImg.offsetWidth / 2 / rect.width;
+  const max = 1 - min;
+  const previewPercent = clamp(min, percent, max);
   const previewImgSrc = `previewImgs/preview${previewImgNumber}.jpg`;
   previewImg.src = previewImgSrc;
   timelineContainer.style.setProperty("--preview-position", percent);
+  timelineContainer.style.setProperty("--preview-img-position", previewPercent);
 
   if (isScrubbing) {
     e.preventDefault();
@@ -145,7 +156,7 @@ video.addEventListener("timeupdate", () => {
   currentTimeElem.textContent = formatDuration(video.currentTime);
   const percent = video.currentTime / video.duration;
   timelineContainer.style.setProperty("--progress-position", percent);
-});
+},{once: true});
 
 const leadingZeroFormatter = new Intl.NumberFormat(undefined, {
   minimumIntegerDigits: 2,
