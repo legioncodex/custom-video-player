@@ -64,14 +64,17 @@ document.addEventListener("pointermove", (e) => {
 let isScrubbing = false;
 let wasPaused;
 function toggleScrubbing(e) {
-  timelineContainer.setPointerCapture(e.pointerId)
+  timelineContainer.setPointerCapture(e.pointerId);
   const rect = timelineContainer.getBoundingClientRect();
   const percent = Math.min(Math.max(0, e.x - rect.x), rect.width) / rect.width;
   isScrubbing = (e.buttons & 1) === 1;
   videoContainer.classList.toggle("scrubbing", isScrubbing);
   if (isScrubbing) {
+    e.preventDefault();
     wasPaused = video.paused;
     video.pause();
+    thumbnailImg.src = previewImgSrc;
+    timelineContainer.style.setProperty("--progress-position", percent);
   } else {
     video.currentTime = percent * video.duration;
     if (!wasPaused) video.play();
