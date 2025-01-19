@@ -152,11 +152,17 @@ video.addEventListener("loadeddata", () => {
   totalTimeElem.textContent = formatDuration(video.duration);
 });
 
+video.addEventListener(
+  "timeupdate",
+  () => (currentTimeElem.textContent = formatDuration(video.currentTime)),
+  { once: true }
+);
+
 video.addEventListener("timeupdate", () => {
   currentTimeElem.textContent = formatDuration(video.currentTime);
   const percent = video.currentTime / video.duration;
   timelineContainer.style.setProperty("--progress-position", percent);
-},{once: true});
+});
 
 const leadingZeroFormatter = new Intl.NumberFormat(undefined, {
   minimumIntegerDigits: 2,
