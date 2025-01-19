@@ -55,7 +55,7 @@ let isScrubbing = false;
 let wasPaused;
 //Timeline
 timelineContainer.addEventListener("mousemove", handleTimelineUpdate);
-timelineContainer.addEventListener(mousedown, toggleScrubbing)
+timelineContainer.addEventListener("mousedown", toggleScrubbing)
 //pointer events
 timelineContainer.addEventListener("pointerdown", (e) => {
   timelineContainer.setPointerCapture(e.pointerId);
@@ -81,7 +81,7 @@ function toggleScrubbing(e) {
   videoContainer.classList.toggle("scrubbing", isScrubbing);
   if (isScrubbing) {
     wasPaused = video.paused;
-    // video.pause();
+    video.pause();
   } else {
     video.currentTime = percent * video.duration;
     if (!wasPaused) video.play();
