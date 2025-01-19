@@ -51,25 +51,31 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
+let isScrubbing = false;
+let wasPaused;
 //Timeline
-timelineContainer.addEventListener("pointermove", handleTimelineUpdate);
+timelineContainer.addEventListener("mousemove", handleTimelineUpdate);
 timelineContainer.addEventListener("pointerdown", (e) => {
   timelineContainer.setPointerCapture(e.pointerId);
+  isScrubbing = true;
   toggleScrubbing(e);
+  timelineContainer.addEventListener("pointermove", handleTimelineUpdate);
+  timelineContainer.addEventListener("pointerup", (e) => {
+    isScrubbing = false;
+    toggleScrubbing(e);
+    timelineContainer.removeEventListener("pointermove", handleTimelineUpdate);
+  }, {once:true});
 });
-document.addEventListener("pointerup", (e) => {
+document.addEventListener("mouseup", (e) => {
   if (isScrubbing) toggleScrubbing(e);
 });
-document.addEventListener("pointermove", (e) => {
+document.addEventListener("mousemove", (e) => {
   if (isScrubbing) handleTimelineUpdate(e);
 });
 
-let isScrubbing = false;
-let wasPaused;
 function toggleScrubbing(e) {
   const rect = timelineContainer.getBoundingClientRect();
   const percent = Math.min(Math.max(0, e.x - rect.x), rect.width) / rect.width;
-  isScrubbing = (e.buttons & 1) === 1;
   videoContainer.classList.toggle("scrubbing", isScrubbing);
   if (isScrubbing) {
     wasPaused = video.paused;
