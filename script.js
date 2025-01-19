@@ -87,7 +87,7 @@ function toggleScrubbing(e) {
     if (!wasPaused) video.play();
   }
 
-  // handleTimelineUpdate(e);
+  handleTimelineUpdate(e);
 }
 
 function clamp(min, value, max) {
