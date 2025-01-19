@@ -168,6 +168,7 @@ video {
   cursor: pointer;
   display: flex;
   align-items: center;
+  touch-action: none;
 }
 
 .timeline {
