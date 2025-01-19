@@ -52,12 +52,12 @@ document.addEventListener("keydown", (e) => {
 });
 
 //Timeline
-timelineContainer.addEventListener("mousemove", handleTimelineUpdate);
-timelineContainer.addEventListener("mousedown", toggleScrubbing);
-document.addEventListener("mouseup", (e) => {
+timelineContainer.addEventListener("pointermove", handleTimelineUpdate);
+timelineContainer.addEventListener("pointerdown", toggleScrubbing);
+document.addEventListener("pointerup", (e) => {
   if (isScrubbing) toggleScrubbing(e);
 });
-document.addEventListener("mousemove", (e) => {
+document.addEventListener("pointermove", (e) => {
   if (isScrubbing) handleTimelineUpdate(e);
 });
 
@@ -96,7 +96,7 @@ function handleTimelineUpdate(e) {
   const previewImgSrc = `previewImgs/preview${previewImgNumber}.jpg`;
   previewImg.src = previewImgSrc;
   timelineContainer.style.setProperty("--preview-position", percent);
-  timelineContainer.style.setProperty("--preview-img-position",  previewPercent);
+  timelineContainer.style.setProperty("--preview-img-position", previewPercent);
 
   if (isScrubbing) {
     e.preventDefault();
