@@ -53,7 +53,10 @@ document.addEventListener("keydown", (e) => {
 
 //Timeline
 timelineContainer.addEventListener("pointermove", handleTimelineUpdate);
-timelineContainer.addEventListener("pointerdown", toggleScrubbing);
+timelineContainer.addEventListener("pointerdown", (e) => {
+  timelineContainer.setPointerCapture(e.pointerId);
+  toggleScrubbing(e);
+});
 document.addEventListener("pointerup", (e) => {
   if (isScrubbing) toggleScrubbing(e);
 });
@@ -64,7 +67,6 @@ document.addEventListener("pointermove", (e) => {
 let isScrubbing = false;
 let wasPaused;
 function toggleScrubbing(e) {
-  timelineContainer.setPointerCapture(e.pointerId)
   const rect = timelineContainer.getBoundingClientRect();
   const percent = Math.min(Math.max(0, e.x - rect.x), rect.width) / rect.width;
   isScrubbing = (e.buttons & 1) === 1;
