@@ -54,11 +54,11 @@ document.addEventListener("keydown", (e) => {
 //Timeline
 timelineContainer.addEventListener("mousemove", handleTimelineUpdate);
 timelineContainer.addEventListener("mousedown", toggleScrubbing);
-document.addEventListener("mouseup", e => {
-  if (isScrubbing)toggleScrubbing(e);
-})
+document.addEventListener("mouseup", (e) => {
+  if (isScrubbing) toggleScrubbing(e);
+});
 document.addEventListener("mousemove", (e) => {
-  if (isScrubbing) handleTimelineUpdate(e)
+  if (isScrubbing) handleTimelineUpdate(e);
 });
 
 let isScrubbing = false;
@@ -78,6 +78,23 @@ function toggleScrubbing(e) {
 
   handleTimelineUpdate(e);
 }
+
+timelineContainer.addEventListener("pointerdown", (e) => {
+  timelineContainer.setPointerCapture(e.pointerId)
+  handleTimelineUpdate(e);
+
+  timelineContainer.addEventListener("pointermove", handleTimelineUpdate);
+  timelineContainer.addEventListener(
+    "pointerup",
+    () => {
+      timelineContainer.removeEventListener(
+        "pointermove",
+        handleTimelineUpdate
+      );
+    },
+    { once: true }
+  );
+});
 
 function handleTimelineUpdate(e) {
   const rect = timelineContainer.getBoundingClientRect();
