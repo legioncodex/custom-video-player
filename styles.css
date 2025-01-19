@@ -34,6 +34,7 @@ body {
 
 video {
   width: 100%;
+  touch-action: none;
 }
 
 .video-controls-container {
@@ -168,7 +169,6 @@ video {
   cursor: pointer;
   display: flex;
   align-items: center;
-  touch-action: none;
 }
 
 .timeline {
