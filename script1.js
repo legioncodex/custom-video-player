@@ -55,7 +55,6 @@ let isScrubbing = false;
 let wasPaused;
 //Timeline
 timelineContainer.addEventListener("mousemove", handleTimelineUpdate);
-timelineContainer.addEventListener("mousedown", toggleScrubbing)
 //pointer events
 timelineContainer.addEventListener("pointerdown", (e) => {
   timelineContainer.setPointerCapture(e.pointerId);
@@ -67,12 +66,6 @@ timelineContainer.addEventListener("pointerdown", (e) => {
     toggleScrubbing(e);
     timelineContainer.removeEventListener("pointermove", handleTimelineUpdate);
   }, {once:true});
-});
-document.addEventListener("mouseup", (e) => {
-  if (isScrubbing) toggleScrubbing(e);
-});
-document.addEventListener("mousemove", (e) => {
-  if (isScrubbing) handleTimelineUpdate(e);
 });
 
 function toggleScrubbing(e) {
